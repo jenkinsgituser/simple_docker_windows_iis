@@ -1,6 +1,6 @@
 ---
 - name: Install configure deploy docker container with war file
-  hosts: docker
+  hosts: windows
   become: yes
   become_user: ansadmin
   tasks:
