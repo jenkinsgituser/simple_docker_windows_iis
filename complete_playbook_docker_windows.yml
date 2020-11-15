@@ -1,0 +1,55 @@
+---
+- name: Install configure deploy docker container with war file
+  hosts: docker
+  become: yes
+  become_user: ansadmin
+  tasks:
+#  - name: Stop a container
+#    docker_container:
+#      name: compledoker:latest
+#      state: stopped
+
+  - name: remove docker container
+    docker_container:
+      name: completedoker
+      state: absent
+
+  - name: remove docker image
+    docker_image:
+      name: completedoker:latest
+      state: absent
+
+  - name: create build directory
+    file:
+      path: /opt/ansible/docker/windows
+      state: directory
+      owner: ansadmin
+      group: ansadmin
+      mode: '0775'
+  - name: copy Dockerfile
+    copy:
+      src: ./Dockerfile
+      dest: /opt/ansible/docker/windows/Dockerfile
+      owner: ansadmin
+      group: ansadmin
+      mode: '0644'
+  - name: copy index.html file
+    win_copy:
+      src: ./index.html
+      dest: C:\Inetpub\wwwroot\
+      owner: ansadmin
+      group: ansadmin
+      mode: '0644'
+  - name: build docker image
+    docker_image:
+      name: completedoker
+      state: present
+      path: /opt/ansible/docker/windows
+      tag: latest
+
+  - name: Create a docker container
+    docker_container:
+      name: completedoker
+      image: completedoker:latest
+      ports:
+        - "80:80"
