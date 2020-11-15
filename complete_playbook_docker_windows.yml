@@ -4,11 +4,6 @@
   become: yes
   become_user: ansadmin
   tasks:
-#  - name: Stop a container
-#    docker_container:
-#      name: compledoker:latest
-#      state: stopped
-
   - name: remove docker container
     docker_container:
       name: completedoker
@@ -20,31 +15,25 @@
       state: absent
 
   - name: create build directory
-    file:
-      path: /opt/ansible/docker/windows
+    win_file:
+      path: C:\Temp\Docker\windows
       state: directory
-      owner: ansadmin
-      group: ansadmin
-      mode: '0775'
+    
   - name: copy Dockerfile
-    copy:
-      src: ./Dockerfile
-      dest: /opt/ansible/docker/windows/Dockerfile
-      owner: ansadmin
-      group: ansadmin
-      mode: '0644'
+    win_copy:
+      src: .\Dockerfile
+      dest: C:\Temp\Docker\windows
+
   - name: copy index.html file
     win_copy:
-      src: ./index.html
-      dest: C:\Inetpub\wwwroot\
-      owner: ansadmin
-      group: ansadmin
-      mode: '0644'
+      src: .\index.html
+      dest: C:\Temp\Docker\windows
+
   - name: build docker image
     docker_image:
       name: completedoker
       state: present
-      path: /opt/ansible/docker/windows
+      path: C:\Temp\Docker\windows
       tag: latest
 
   - name: Create a docker container
