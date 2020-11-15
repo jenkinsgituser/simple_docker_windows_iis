@@ -3,37 +3,39 @@
   hosts: windows
   become: yes
   become_user: ansadmin
+  gather_facts: yes
+
   tasks:
-  - name: remove docker container
-    docker_container:
-      name: completedoker
-      state: absent
+#  - name: remove docker container
+#    docker_container:
+#      name: completedoker
+#      state: absent
 
-  - name: remove docker image
-    docker_image:
-      name: completedoker:latest
-      state: absent
+#  - name: remove docker image
+#    docker_image:
+#      name: completedoker:latest
+#      state: absent
 
-  - name: create build directory
-    win_file:
-      path: C:\Temp\Docker\windows
-      state: directory
-    
-  - name: copy Dockerfile
-    win_copy:
-      src: .\Dockerfile
-      dest: C:\Temp\Docker\windows
+#  - name: create build directory
+#    win_file:
+#      path: C:\Temp\Docker\windows
+#      state: directory
 
-  - name: copy index.html file
-    win_copy:
-      src: .\index.html
-      dest: C:\Temp\Docker\windows
+#  - name: copy Dockerfile
+#    win_copy:
+#      src: /opt/ansible/docker/windows/Dockerfile
+#      dest: C:\\Temp\\Docker\\windows\\
+
+#  - name: copy index.html file
+#    win_copy:
+#      src: /opt/ansible/docker/windows/index.html
+#      dest: C:\\Temp\\Docker\\windows\\
 
   - name: build docker image
     docker_image:
       name: completedoker
-      state: present
       path: C:\Temp\Docker\windows
+      state: present
       tag: latest
 
   - name: Create a docker container
